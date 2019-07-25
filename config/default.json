@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb://localhost/FishDb",
+    "baseUrl": "http://localhost:5000"
+}
