@@ -22,13 +22,11 @@ app.get("/:shortUrl", async (req, res) => {
   try {
     const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl });
     if (shortUrl == null) return res.sendStatus(404);
-
     shortUrl.clicks++;
     shortUrl.save();
-
     res.redirect(shortUrl.full);
   } catch (error) {
-    console.log(error.message);
+    console.log(err.message);
   }
 });
 
@@ -38,9 +36,7 @@ const CONNECTION_URL =
 mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() =>
-    app.listen(PORT, () =>
-      console.log(`Server Running on Port: http://localhost:${PORT}`)
-    )
+    app.listen(PORT, () => console.log(`Server Running on Port: ${PORT}`))
   )
   .catch((error) => console.log(`${error} did not connect`));
 
