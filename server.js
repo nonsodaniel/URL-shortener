@@ -1,22 +1,34 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const shortUrl = require("./models/url");
+const ShortUrl = require("./models/url");
 const app = express();
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
 
-app.get("/", (req, res) => {
-  // const shorturls = await shortUrl.find
-  res.render("index");
+app.get("/", async (req, res) => {
+  const shorturls = await ShortUrl.find();
+  res.render("index", { shorturls: shorturls });
 });
 app.post("/shortUrls", async (req, res) => {
   try {
-    //  return console.log(req.body)
-    await shortUrl.create({ full: req.body.fullUrl });
+    await ShortUrl.create({ full: req.body.fullUrl });
     res.redirect("/");
   } catch (error) {
     console.log("error", error.message);
+  }
+});
+app.get("/:shortUrl", async (req, res) => {
+  try {
+    const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl });
+    if (shortUrl == null) return res.sendStatus(404);
+
+    shortUrl.clicks++;
+    shortUrl.save();
+
+    res.redirect(shortUrl.full);
+  } catch (error) {
+    console.log(error.message);
   }
 });
 
