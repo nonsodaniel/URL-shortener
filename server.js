@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const ShortUrl = require("./models/url");
@@ -31,8 +32,7 @@ app.get("/:shortUrl", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-const CONNECTION_URL =
-  "mongodb+srv://nonso:nonsodan@cluster0.cj0um.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const CONNECTION_URL = process.env.DB;
 mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() =>
